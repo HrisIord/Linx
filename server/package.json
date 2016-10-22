@@ -3,12 +3,14 @@
   "version": "0.0.1",
   "description": "Linx: The utility for sharing links between your devices.",
   "dependencies": {
+    "body-parser": "^1.15.2",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
-    "body-parser": "^1.15.0",
     "mongodb": "^2.1.11"
   },
-  "os" : ["!win32"],
+  "os": [
+    "!win32"
+  ],
   "scripts": {
     "start": "./start_server.sh",
     "clean": "rm -rf node_modules"

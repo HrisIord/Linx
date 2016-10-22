@@ -1,5 +1,5 @@
 var express     = require('express');
-var bodyParser  = require('body-parser')
+var bodyParser  = require('body-parser');
 var url         = require('url');
 
 var app     = express();
@@ -11,12 +11,13 @@ var http    = require('http').Server(app);
 var port = 3000;        
 
 // middleware to use for all requests
-app.use(express.bodyParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 router.use(function(req, res, next) { next(); });
 
 // home page route
 router.get('/', function(req, res) {
-  console.log(req.body);
+  console.log(req);
   res.send('hello world');
 });
 
@@ -30,6 +31,6 @@ router.post('/', function(req, res) {
 app.use('/', router);
 
 // RUN EVERYTHING!
-http.listen(port, function(){
+http.listen(port, function() {
   console.log('listening on *:' + port);
 });
