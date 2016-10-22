@@ -17,11 +17,13 @@ router.use(function(req, res, next) { next(); });
 // home page route
 router.get('/', function(req, res) {
   console.log(req.body);
+  res.send('hello world');
 });
 
 // home page route
 router.post('/', function(req, res) {
   console.log(req.body);
+  res.send(req.body);
 });
 
 // register routes ------------------------------------------------------------
