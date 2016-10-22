@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "Linx",
+  "version": "0.1",
+
+  "description": "Linx: The utility for sharing links between your devices.",
+  "homepage_url": "https://github.com/mdn/webextensions-examples/tree/master/beastify",
+  "icons": {
+    "48": "icons/beasts-48.png",
+    "96": "icons/beasts-96.png"
+  },
+
+  "browser_action": {
+    "default_icon": "icons/beasts-32.png",
+    "default_title": "Linx",
+    "default_popup": "popup/choose_beast.html"
+  }
+}
