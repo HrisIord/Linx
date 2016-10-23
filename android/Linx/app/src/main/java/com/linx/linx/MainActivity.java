@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.linx.linx.utils.HTTPUtil;
+import com.linx.linx.utils.HTTPTask;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HTTPTask.HTTPTaskResponse {
 
     public final static String EXTRA_MESSAGE = "com.linx.linx.MESSAGE";
 
@@ -22,10 +22,14 @@ public class MainActivity extends AppCompatActivity {
         EditText editText = (EditText) findViewById(R.id.edit_message);
         String message = editText.getText().toString();
 
-        HTTPUtil.post("", "{insa: \"Hello, world!\"}");
+        HTTPTask task = new HTTPTask(this);
+        task.execute(HTTPTask.METHOD_POST, "http://138.197.134.223:3000/", "{\"insa\": \"Hello, world!\"}");
+    }
 
+    @Override
+    public void processFinish(String result) {
         Intent intent = new Intent(this, DisplayMessageActivity.class);
-        intent.putExtra(EXTRA_MESSAGE, message);
+        intent.putExtra(EXTRA_MESSAGE, result);
         startActivity(intent);
     }
 }

@@ -17,7 +17,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
         String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
         TextView textView = new TextView(this);
         textView.setTextSize(40);
-        textView.setText("The message: \"" + message + "\" was sent!");
+        textView.setText("The message: \"" + message + "\" was recieved!");
 
         ViewGroup layout = (ViewGroup) findViewById(R.id.activity_display_message);
         layout.addView(textView);
