@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements HTTPTask.HTTPTask
         String message = editText.getText().toString();
 
         HTTPTask task = new HTTPTask(this);
-        task.execute(HTTPTask.METHOD_POST, "http://138.197.134.223:3000/", "{\"insa\": \"Hello, world!\"}");
+        task.execute(HTTPTask.METHOD_POST, "http://138.197.134.223:3000/", "{ \"url\": \"https://www.youtube.com/watch?v=OjDAU3f5YQs\" }");
     }
 
     @Override

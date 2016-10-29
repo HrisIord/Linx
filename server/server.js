@@ -24,11 +24,12 @@ router.get('/', function(req, res) {
 	MongoClient.connect(dbPath, function(err, db) {
     if (err) { return console.dir(err); }
 
-    db.collection('links').find({}, function (err, result) {
+    db.collection('links').find().toArray(function (err, result) {
       if (err) { return console.log(err); }
 
       console.log(result);
       res.send(result);
+      db.close();
     });
   });
 });
@@ -37,11 +38,12 @@ router.post('/', function(req, res) {
 	MongoClient.connect(dbPath, function(err, db) {
     if (err) { return console.log(err); }
 
-    db.collection('links').insert({ url: req.body }, function (err, result) {      
+    db.collection('links').insert({ url: req.body.url }, function (err, result) {      
       if (err) { return console.log(err); }
 
-      console.log({ url: req.body });
+      console.log(req.body);
       res.send(req.body);
+      db.close();
     });
   });
 });
