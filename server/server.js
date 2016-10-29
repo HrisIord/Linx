@@ -6,6 +6,9 @@ var app     = express();
 var router  = express.Router();
 var http    = require('http').Server(app);
 
+const dbPath = "mongodb://127.0.0.1:27017/linxdb";
+const mongo = require('mongodb');
+const MongoClient = mongo.MongoClient;
 
 // set the port
 var port = 3000;        
@@ -15,16 +18,32 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 router.use(function(req, res, next) { next(); });
 
-// home page route
+
+// path stuff -----------------------------------------------------------------
 router.get('/', function(req, res) {
-  console.log(req);
-  res.send('hello world');
+	MongoClient.connect(dbPath, function(err, db) {
+    if (err) { return console.dir(err); }
+
+    db.collection('links').find({}, function (err, result) {
+      if (err) { return console.log(err); }
+
+      console.log(result);
+      res.send(result);
+    });
+  });
 });
 
-// home page route
 router.post('/', function(req, res) {
-  console.log(req.body);
-  res.send(req.body);
+	MongoClient.connect(dbPath, function(err, db) {
+    if (err) { return console.log(err); }
+
+    db.collection('links').insert({ url: req.body }, function (err, result) {      
+      if (err) { return console.log(err); }
+
+      console.log({ url: req.body });
+      res.send(req.body);
+    });
+  });
 });
 
 // register routes ------------------------------------------------------------
