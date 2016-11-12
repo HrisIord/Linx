@@ -1,15 +1,9 @@
 console.log('hi');
 
 $(document).on('click', '#get-links', function() {
-  $.get('http://138.197.134.223:3000/')
-    .done(function(data) {
-      console.log('success');
-      console.log(data);
-    })
-    .fail(function(xhr, errorType, exception) {
-      console.log(xhr);
-      console.log(errorType);
-      console.log(exception);
-      console.log('fail');
-    });
+  console.log('sending message');
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    console.log(tabs);
+    chrome.tabs.sendMessage(tabs[0].id, {hi: "hello"});
+  });
 });
