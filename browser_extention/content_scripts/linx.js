@@ -1,7 +1,10 @@
 function handleMsg(request, sender, sendResponse) {
   console.log('in connent script');
+  
+  // set up ajax call
   var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'http://138.197.134.223:3000/', true);
+  xhr.open(request.method, 'https://localhost:8443' + request.path, true);
+  console.log(request.method + ' ' + request.path);
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       console.log('done');
@@ -11,7 +14,21 @@ function handleMsg(request, sender, sendResponse) {
       }
     }
   }
-  xhr.send();
+
+  // send ajax call
+  if (request.method === 'GET') {
+    xhr.send();
+  } else {
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    var params = 'ext=true';
+    $.each(request.content, function(label, value) {
+      params += '&' + label + '=' + encodeURIComponent(value);
+    });
+    console.log(params);
+
+    xhr.send(params);
+  }
 };
 
 
