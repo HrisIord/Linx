@@ -34,6 +34,7 @@ var httpPort = 8080;
 var httpsPort = 8443;
 
 var userModel = require('./userModel')();
+var repoModel = require('./repoModel')();
 
 // --------------------------------- HELPERS ----------------------------------
 // checks ig an object is empty
@@ -72,7 +73,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  userModel.selectUser(id, function(err, user) {
+  userModel.select(id, function(err, user) {
     if (err) {
       return req.logout();
     }
@@ -112,7 +113,7 @@ passport.use(new LocalStrategy({
   passwordField: 'password'
 },
   function(username, password, done) {
-    userModel.authUser(username, password, function(err, user){
+    userModel.authenticate(username, password, function(err, user){
       if (err) { return done(err); }
       if (!user) { return done(null, false); }
       return done(null, user);
@@ -160,7 +161,7 @@ router.route('/login')
 
 router.route('/register')
   .post(function (req, res) {
-    userModel.insertUser(req.body.username, req.body.password, {email: req.body.email}, function (err, result) {
+    userModel.insert(req.body.username, req.body.password, {email: req.body.email}, function (err, result) {
       if (err) { 
         console.log('[error] register callback - ');
         console.log(err);
@@ -182,7 +183,18 @@ router.route('/register')
         return;
       }
 
-      res.status(200).json({'error': null});
+      // create default repo for user
+      console.log(result.insertedIds);
+      repoModel.insert(result.insertedIds[0], username + "'s Default Repo", function (err, result) {
+        if (err) {
+          console.log('[error] register callback - ');
+          console.log(err);
+          res.status(500).json({'error': err.errmsg});
+          return;
+        }
+
+        res.status(200).json({'error': null});
+      });      
     });
   });
 
@@ -200,7 +212,7 @@ router.route('/profile')
       return;
     } else {
       //  get user from db
-      userModel.selectUser(req.session.passport.user, function (err, user) {
+      userModel.select(req.session.passport.user, function (err, user) {
         if (err) {
           console.log('[error] profile callback - ');
           console.log(err);
@@ -225,6 +237,8 @@ router.route('/profile')
 //       res.status(200).json({'user': user});
 //     });
 //   });
+
+// --------------------------- REPOS CONTROLLER -------------------------------
 
 
 // ----------------------------------------------------------------------------

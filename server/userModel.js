@@ -15,20 +15,20 @@ const HASH_ALGO = 'sha512';
 
 
 module.exports = function () {
-  userCollectionInit();
+  collectionInit();
   return {
-    insertUser: insertUser,
-    selectUser: selectUser,
-    authUser: authUser,
+    insertUser: insert,
+    selectUser: select,
+    authUser: authenticate,
     insertOrSelectUserFromTwitterID: insertOrSelectUserFromTwitterID
   };
 };
 
 /**
- * Initializes the user Collection in the database 
+ * Initializes the user collection in the database 
  */
-function userCollectionInit() {
-  MongoClient.connect(dbpath, function(err, db) {
+function collectionInit() {
+  MongoClient.connect(dbpath, function (err, db) {
     if (err) { 
       return console.dir(err); 
     }
@@ -47,7 +47,7 @@ function userCollectionInit() {
  * Only used when using Local authentication.
  * The callback should take in err, result, in the same format as the callback for db.collection.insert
  */
-function insertUser(username, password, email, callback) {
+function insert(username, password, email, callback) {
   /** 
    * Password Hashing Process:
    * 1. Generate a random salt
@@ -67,11 +67,11 @@ function insertUser(username, password, email, callback) {
   user['email'] = email;
 
   // Connect to the db
-  MongoClient.connect(dbpath, function(err, db) {
+  MongoClient.connect(dbpath, function (err, db) {
     if (err) { return console.dir(err); }
 
     var user_collection = db.collection('users');
-    user_collection.insert(user, function(err, result) {
+    user_collection.insert(user, function (err, result) {
       callback(err, result);
     });
   });
@@ -80,23 +80,25 @@ function insertUser(username, password, email, callback) {
 /** 
  * Takes in a user ID and returns the user's properties
  */
-function selectUser(userId, callback) {
+function select(userId, callback) {
   MongoClient.connect(dbpath, function (err, db) {
     if (err) { return console.dir(err); }
 
     var collection = db.collection('users');
     var promise = collection.findOne({'_id': mongo.ObjectID(userId)});
-    promise.then(function (user) {
-      if (!user) {
-        callback("User ID not in database.", null);
-      } else {
-        callback(null, user);
-      }
-    }, function (reason) {
-      console.log("[error] selectUser - ");
-      console.log(reason);
-      callback(reason, null);
-    });
+    promise.then(
+      function (user) {
+        if (!user) {
+          callback("User ID not in database.", null);
+        } else {
+          callback(null, user);
+        }
+      }, 
+      function (reason) {
+        console.log("[error] selectUser - ");
+        console.log(reason);
+        callback(reason, null);
+      });
   });
 }
 
@@ -105,32 +107,33 @@ function selectUser(userId, callback) {
  * Verifies the username and password, and calls callback with arguments
  * The callback arguments are err, uid
  */
-function authUser(username, password, callback) {
+function authenticate(username, password, callback) {
   MongoClient.connect(dbpath, function (err, db) {
     if (err) { return console.dir(err); }
 
     var promise = db.collection('users').findOne({'username': username});
-    promise.then(function (user) {
-
-      if (!user) {
-        callback("User not found.", null);
-      } else {
-        // check password matches
-        var salt = new Buffer(user.salt, 'hex');
-        var hash = crypto.pbkdf2Sync(password, salt, PBKDF2_ITERATIONS, PASSWD_KEYLEN, HASH_ALGO).toString('hex');
-        if (hash === user.password) {
-          // Success!
-          callback(null, user);
+    promise.then(
+      function (user) {
+        if (!user) {
+          callback("User not found.", null);
         } else {
-          callback("Incorrect password.", null); // Authentiation failed.
+          // check password matches
+          var salt = new Buffer(user.salt, 'hex');
+          var hash = crypto.pbkdf2Sync(
+            password, salt, PBKDF2_ITERATIONS, PASSWD_KEYLEN, HASH_ALGO).toString('hex');
+          if (hash === user.password) {
+            // Success!
+            callback(null, user);
+          } else {
+            callback("Incorrect password.", null); // Authentiation failed.
+          }
         }
-      }
-
-    }, function(reason){
-      console.log("[error] authUser - ");
-      console.log(reason);
-      callback(reason, null);
-    });
+      }, 
+      function (reason) {
+        console.log("[error] authUser - ");
+        console.log(reason);
+        callback(reason, null);
+      });
   })
 }
 

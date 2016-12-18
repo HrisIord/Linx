@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <script src="jquery-3.1.1.min.js"></script>
+  <!-- Materialize -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="materialize/css/materialize.min.css">
+  <script src="materialize/js/materialize.min.js"></script>
+
+  <link rel="stylesheet" href="linx.css"/>
+  <script src="linx.js"></script>
+</head>
+
+<!-- <body class="teal lighten-2"> -->
+<body class="white">
+
+<!-- ******************************** HOME ******************************** -->
+<section id="home" style="display: none;">
+  <h1 id="title" class="center-align white-text">
+    Linx
+  </h1>
+  
+  <div id="nav-buttons" class="center-align">
+    <button id="login-nav-btn" class="waves-effect waves-light btn amber darken-1">
+      Login
+    </button>
+    <br>
+    <br>
+    <button id="register-nav-btn" class="waves-effect waves-light btn amber darken-1">
+      Register
+    </button>
+  </div>
+
+  <div id="register" style="display: none;">
+    <form class="row">
+      <div class="input-field col s12 white-text">
+        <input id="reg-username" type="text">
+        <label for="reg-username">Username</label>
+      </div>
+      <div class="input-field col s12 white-text">
+        <input id="reg-email" type="email">
+        <label for="reg-email">Email</label>
+      </div>
+      <div class="input-field col s12 white-text">
+        <input id="reg-password" type="password">
+        <label for="reg-password">Password</label>
+      </div>
+      <div class="input-field col s12 white-text">
+        <input id="reg-password-conf" type="password">
+        <label for="reg-password-conf">Confirm Password</label>
+      </div>
+      <div class="col s12">
+        <br>
+        <button id="register-sub-btn" class="waves-effect waves-light btn amber darken-1" style="width: 100%;">
+          Register
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div id="login" style="display: none;">
+    <form class="row">
+      <div class="input-field col s12 white-text">
+        <input id="login-username" type="text">
+        <label for="login-username">Username</label>
+      </div>
+      <div class="input-field col s12 white-text">
+        <input id="login-password" type="password">
+        <label for="login-password">Password</label>
+      </div>
+      <div class="col s12">
+        <br>
+        <button id="login-sub-btn" class="waves-effect waves-light btn amber darken-1" style="width: 100%;">
+          Login
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ****************************** GENERAL ******************************* -->
+<section id="general">
+  <ul class="tabs teal lighten-2">
+    <li class="tab">
+      <a class="active white-text" href="#repos">Repos</a>
+    </li>
+    <li class="tab">
+      <a class="white-text" href="#settings">Settings</a>
+    </li>
+  </ul>
+  
+  <!-- REPOS -->
+  <div id="repos">
+    <div id="repo-list">
+      <ul class="collection">
+        <li class="collection-item">
+          Fics
+          <i class="material-icons secondary-content amber-text text-darken-1">play_arrow</i>
+        </li>
+        <li class="collection-item">
+          Kpop
+          <i class="material-icons secondary-content amber-text text-darken-1">play_arrow</i>
+        </li>
+        <li class="collection-item valign-wrapper">
+          Some long title because people suck longer something
+          <i class="material-icons secondary-content valign amber-text text-darken-1">play_arrow</i>
+        </li>
+      </ul>
+    </div>
+
+    <div id="repo-details" style="display: none;">
+      <div>
+        <span class="back">&#60;</span> <span>Title</span> 
+        <a class="btn-floating waves-effect waves-light red"><i class="material-icons">add</i></a>
+        <a class="btn-floating waves-effect waves-light red"><i class="material-icons">add</i></a>
+      </div>
+      <ul class="collection">
+        <li class="collection-item">
+          <div>
+            Title 
+            <a href="#!" class="secondary-content"><i class="material-icons">send</i></a>
+          </div>
+          <span class="link-url grey-text">http://materializecss.com/collapsible.html</span>
+        </li>
+        <li class="collection-item">
+          <div>
+            Title 
+            <a href="#!" class="secondary-content"><i class="material-icons">send</i></a>
+          </div>
+          <span class="link-url grey-text">http://materializecss.com/collapsible.html</span>
+        </li>
+        <li class="collection-item">
+          <div>
+            Title goes here this is very long
+            <a href="#!" class="secondary-content"><i class="material-icons">send</i></a>
+          </div>
+          <span class="link-url grey-text">http://materializecss.com/collapsible.html</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <!-- SETTINGS -->
+  <div id="settings">
+    Something is here!
+  </div>
+
+</section>
+
+</body>
+</html>
