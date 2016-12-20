@@ -1,4 +1,4 @@
-function handleMsg(request, sender, sendResponse) {
+function handleMsg(request, sender, callback) {
   console.log('in connent script');
   
   // set up ajax call
@@ -29,7 +29,10 @@ function handleMsg(request, sender, sendResponse) {
 
     xhr.send(params);
   }
-};
+
+  // return response to the popup js
+  return callback("Hi from content script");
+}
 
 
 chrome.runtime.onMessage.addListener(handleMsg);

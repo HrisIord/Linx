@@ -13,11 +13,9 @@
   <script src="linx.js"></script>
 </head>
 
-<!-- <body class="teal lighten-2"> -->
-<body class="white">
-
+<body>
 <!-- ******************************** HOME ******************************** -->
-<section id="home" style="display: none;">
+<section id="home">
   <h1 id="title" class="center-align white-text">
     Linx
   </h1>
@@ -34,7 +32,7 @@
   </div>
 
   <div id="register" style="display: none;">
-    <form class="row">
+    <div class="row">
       <div class="input-field col s12 white-text">
         <input id="reg-username" type="text">
         <label for="reg-username">Username</label>
@@ -57,11 +55,11 @@
           Register
         </button>
       </div>
-    </form>
+    </div>
   </div>
 
   <div id="login" style="display: none;">
-    <form class="row">
+    <div class="row">
       <div class="input-field col s12 white-text">
         <input id="login-username" type="text">
         <label for="login-username">Username</label>
@@ -76,12 +74,12 @@
           Login
         </button>
       </div>
-    </form>
+    </div>
   </div>
 </section>
 
 <!-- ****************************** GENERAL ******************************* -->
-<section id="general">
+<section id="general" style="display: none;">
   <ul class="tabs teal lighten-2">
     <li class="tab">
       <a class="active white-text" href="#repos">Repos</a>
@@ -97,49 +95,62 @@
       <ul class="collection">
         <li class="collection-item">
           Fics
-          <i class="material-icons secondary-content amber-text text-darken-1">play_arrow</i>
+          <i class="material-icons secondary-content amber-text text-darken-1">play_circle_filled</i>
         </li>
         <li class="collection-item">
           Kpop
-          <i class="material-icons secondary-content amber-text text-darken-1">play_arrow</i>
+          <i class="material-icons secondary-content amber-text text-darken-1">play_circle_filled</i>
         </li>
         <li class="collection-item valign-wrapper">
           Some long title because people suck longer something
-          <i class="material-icons secondary-content valign amber-text text-darken-1">play_arrow</i>
+          <i class="material-icons secondary-content valign amber-text text-darken-1">play_circle_filled</i>
         </li>
       </ul>
     </div>
 
     <div id="repo-details" style="display: none;">
-      <div>
-        <span class="back">&#60;</span> <span>Title</span> 
-        <a class="btn-floating waves-effect waves-light red"><i class="material-icons">add</i></a>
-        <a class="btn-floating waves-effect waves-light red"><i class="material-icons">add</i></a>
+      <div id="nav-area" class="valign-wrapper">
+        <i id="repo-details-back" class="material-icons amber-text text-darken-1 valign">play_circle_filled</i> 
+        <span class="repo-title valign truncate">Title some long title because people suck</span> 
       </div>
       <ul class="collection">
-        <li class="collection-item">
-          <div>
-            Title 
-            <a href="#!" class="secondary-content"><i class="material-icons">send</i></a>
+        <li class="collection-item row">
+          <div class="link-details col s10">
+            <div class="link-title">Title</div>
+            <div class="link-url grey-text">http://materializecss.com/collapsible.html</div>
           </div>
-          <span class="link-url grey-text">http://materializecss.com/collapsible.html</span>
+          <div class="link-action-btns col s2">
+            <i class="material-icons">tab</i>
+            <i class="material-icons">library_books</i>
+          </div>
         </li>
-        <li class="collection-item">
-          <div>
-            Title 
-            <a href="#!" class="secondary-content"><i class="material-icons">send</i></a>
+        <li class="collection-item row">
+          <div class="link-details col s10">
+            <div class="link-title">Some really long title because people suck and like to break som things need is more text</div>
+            <div class="link-url grey-text">http://materializecss.com/collapsible.html/sdklfhwdioyem/ajksdfhkajsdh-sha</div>
           </div>
-          <span class="link-url grey-text">http://materializecss.com/collapsible.html</span>
+          <div class="link-action-btns col s2">
+            <i class="material-icons">tab</i>
+            <i class="material-icons">library_books</i>
+          </div>
         </li>
-        <li class="collection-item">
-          <div>
-            Title goes here this is very long
-            <a href="#!" class="secondary-content"><i class="material-icons">send</i></a>
+        <li class="collection-item row">
+          <div class="link-details col s10">
+            <div class="link-title">Title</div>
+            <div class="link-url grey-text">http://materializecss.com/collapsible.html</div>
           </div>
-          <span class="link-url grey-text">http://materializecss.com/collapsible.html</span>
+          <div class="link-action-btns col s2">
+            <i class="material-icons">tab</i>
+            <i class="material-icons">library_books</i>
+          </div>
         </li>
       </ul>
+      <div class="right">
+        <a class="btn-floating waves-effect waves-light red"><i class="material-icons">turned_in</i></a>
+        <a class="btn-floating waves-effect waves-light red"><i class="material-icons">add</i></a>
+      </div>
     </div>
+
   </div>
   
   <!-- SETTINGS -->
