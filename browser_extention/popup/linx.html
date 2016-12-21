@@ -15,7 +15,7 @@
 
 <body>
 <!-- ******************************** HOME ******************************** -->
-<section id="home">
+<section id="home" style="display: none;">
   <h1 id="title" class="center-align white-text">
     Linx
   </h1>
@@ -79,7 +79,7 @@
 </section>
 
 <!-- ****************************** GENERAL ******************************* -->
-<section id="general" style="display: none;">
+<section id="general" >
   <ul class="tabs teal lighten-2">
     <li class="tab">
       <a class="active white-text" href="#repos">Repos</a>
@@ -93,55 +93,87 @@
   <div id="repos">
     <div id="repo-list">
       <ul class="collection">
-        <li class="collection-item">
-          Fics
-          <i class="material-icons secondary-content amber-text text-darken-1">play_circle_filled</i>
+        <li class="collection-item row valign-wrapper">
+          <div class="col s10 repo-name valign">
+            Fics
+          </div>
+          <div class="col s2 repo-link">
+            <a class="btn-floating waves-effect waves-light amber darken-1 right">
+              <i class="material-icons">play_arrow</i>
+            </a>
+          </div>
         </li>
-        <li class="collection-item">
-          Kpop
-          <i class="material-icons secondary-content amber-text text-darken-1">play_circle_filled</i>
+        <li class="collection-item row valign-wrapper">
+          <div class="col s10 repo-name valign">
+            Kpop
+          </div>
+          <div class="col s2 repo-link">
+            <a class="btn-floating waves-effect waves-light amber darken-1 right">
+              <i class="material-icons">play_arrow</i>
+            </a>
+          </div>
         </li>
-        <li class="collection-item valign-wrapper">
-          Some long title because people suck longer something
-          <i class="material-icons secondary-content valign amber-text text-darken-1">play_circle_filled</i>
+        <li class="collection-item row valign-wrapper">
+          <div class="col s10 repo-name valign">
+            Some long title because people suck xxx longer something
+          </div>
+          <div class="col s2 repo-link">
+            <a class="btn-floating waves-effect waves-light amber darken-1 right">
+              <i class="material-icons">play_arrow</i>
+            </a>
+          </div>
         </li>
       </ul>
     </div>
 
     <div id="repo-details" style="display: none;">
       <div id="nav-area" class="valign-wrapper">
-        <i id="repo-details-back" class="material-icons amber-text text-darken-1 valign">play_circle_filled</i> 
-        <span class="repo-title valign truncate">Title some long title because people suck</span> 
+        <a class="btn-floating waves-effect waves-light amber darken-1">
+          <i id="repo-details-back" class="material-icons">play_arrow</i>
+        </a> 
+        <span class="repo-name valign truncate">Title some long title because people suck</span> 
       </div>
       <ul class="collection">
         <li class="collection-item row">
-          <div class="link-details col s10">
+          <div class="link-details col s9">
             <div class="link-title">Title</div>
             <div class="link-url grey-text">http://materializecss.com/collapsible.html</div>
           </div>
-          <div class="link-action-btns col s2">
-            <i class="material-icons">tab</i>
-            <i class="material-icons">library_books</i>
+          <div class="link-action-btns col s3">
+            <a class="btn-floating btn-flat waves-effect waves-teal">
+              <i class="material-icons">tab</i>
+            </a> 
+            <a class="btn-floating btn-flat waves-effect waves-light">
+              <i class="material-icons">library_books</i>
+            </a>
           </div>
         </li>
         <li class="collection-item row">
-          <div class="link-details col s10">
+          <div class="link-details col s9">
             <div class="link-title">Some really long title because people suck and like to break som things need is more text</div>
             <div class="link-url grey-text">http://materializecss.com/collapsible.html/sdklfhwdioyem/ajksdfhkajsdh-sha</div>
           </div>
-          <div class="link-action-btns col s2">
-            <i class="material-icons">tab</i>
-            <i class="material-icons">library_books</i>
+          <div class="link-action-btns col s3">
+            <a class="btn-floating btn-flat waves-effect waves-teal">
+              <i class="material-icons">tab</i>
+            </a> 
+            <a class="btn-floating btn-flat waves-effect waves-light">
+              <i class="material-icons">library_books</i>
+            </a>
           </div>
         </li>
         <li class="collection-item row">
-          <div class="link-details col s10">
+          <div class="link-details col s9">
             <div class="link-title">Title</div>
             <div class="link-url grey-text">http://materializecss.com/collapsible.html</div>
           </div>
-          <div class="link-action-btns col s2">
-            <i class="material-icons">tab</i>
-            <i class="material-icons">library_books</i>
+          <div class="link-action-btns col s3">
+            <a class="btn-floating btn-flat waves-effect waves-teal">
+              <i class="material-icons">tab</i>
+            </a> 
+            <a class="btn-floating btn-flat waves-effect waves-light">
+              <i class="material-icons">library_books</i>
+            </a>
           </div>
         </li>
       </ul>
