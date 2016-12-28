@@ -17,9 +17,9 @@ const HASH_ALGO = 'sha512';
 module.exports = function () {
   collectionInit();
   return {
-    insertUser: insert,
-    selectUser: select,
-    authUser: authenticate,
+    insert: insert,
+    select: select,
+    authenticate: authenticate,
     insertOrSelectUserFromTwitterID: insertOrSelectUserFromTwitterID
   };
 };

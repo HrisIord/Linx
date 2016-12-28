@@ -3,7 +3,7 @@
 body {
   width: 400px;
   min-height: 100px;
-  /*background-color: #4db6ac;*/
+  background-color: #4db6ac;
 }
 
 
@@ -18,16 +18,42 @@ body {
 }
 
 #nav-buttons button {
-  width: 100px;
+  width: 150px;
+}
+
+#home .sub {
+  width: 100%;
+}
+
+#reg-errors .card-panel {
+  padding: 10px;
+  margin: 0 0 10px 0;
 }
 
 /* Repos Section */
 
-#repo-list ul {
-  border: none;
+.action-btns {
+  padding-top: 10px;
+  border-top: 1px solid #e0e0e0;
 }
 
-#repo-list li {
+.action-btns .btn {
+  width: 110px;
+  padding: 0 10px; 
+}
+
+.action-btns .btn i {
+  margin-left: 5px !important;
+}
+
+/* Repo Index */
+
+#repo-list .collection {
+  border-left: none;
+  border-right: none;
+}
+
+#repo-list .collection-item {
   font-size: 1.5em;
   cursor: pointer;
   border-left: none;
@@ -49,6 +75,8 @@ body {
   padding: 10px;
 }
 
+/* Link Index */
+
 #repo-details-back {
   /* flip horizontally */
   -moz-transform: scale(-1, 1);
@@ -69,7 +97,7 @@ body {
   margin: 0 3px;
 }
 
-#repo-details ul {
+#repo-details .collection {
   border-left: none;
   border-right: none;
 }
@@ -99,52 +127,84 @@ body {
   color: #4db6ac;
 }
 
+.settings-heading {
+  border-bottom: 1px solid #9e9e9e;
+  font-size: 2em;
+}
 
 /* Materialize overrides for input feilds */
 
 /* label color */
-.input-field label {
+#home .input-field label {
   color: white;
 }
-.input-field input {
+#home .input-field input {
   border-bottom: 1px solid white;
   box-shadow: 0 1px 0 0 white;
 }
 /* label focus color */
-.input-field input[type=text]:focus + label {
+#home .input-field input[type=text]:focus + label {
   color: white;
 }
 /* label underline focus color */
-.input-field input[type=text]:focus {
+#home .input-field input[type=text]:focus {
   border-bottom: 1px solid white;
   box-shadow: 0 1px 0 0 white;
 }
 /* label focus color */
-.input-field input[type=password]:focus + label {
+#home .input-field input[type=password]:focus + label {
   color: white;
 }
 /* label underline focus color */
-.input-field input[type=password]:focus {
+#home .input-field input[type=password]:focus {
   border-bottom: 1px solid white;
   box-shadow: 0 1px 0 0 white;
 }
 /* label focus color */
-.input-field input[type=email]:focus + label {
+#home .input-field input[type=email]:focus + label {
   color: white;
 }
 /* label underline focus color */
-.input-field input[type=email]:focus {
+#home .input-field input[type=email]:focus {
   border-bottom: 1px solid white;
   box-shadow: 0 1px 0 0 white;
+}
+/* invalid color */
+#home .input-field input[type=text].invalid {
+  border-bottom: 1px solid #ffb300;
+  box-shadow: 0 1px 0 0 #ffb300;
+}
+
+/* label focus color */
+#general .input-field input[type=text]:focus + label {
+  color: #4db6ac;
+}
+/* label underline focus color */
+#general .input-field input[type=text]:focus {
+  border-bottom: 1px solid #4db6ac;
+  box-shadow: 0 1px 0 0 #4db6ac;
+}
+/* label focus color */
+#general .input-field input[type=password]:focus + label {
+  color: #4db6ac;
+}
+/* label underline focus color */
+#general .input-field input[type=password]:focus {
+  border-bottom: 1px solid #4db6ac;
+  box-shadow: 0 1px 0 0 #4db6ac;
+}
+/* label focus color */
+#general .input-field input[type=email]:focus + label {
+  color: #4db6ac;
+}
+/* label underline focus color */
+#general .input-field input[type=email]:focus {
+  border-bottom: 1px solid #4db6ac;
+  box-shadow: 0 1px 0 0 #4db6ac;
 }
 
 /* valid color */
 .input-field input[type=text].valid {
-  border-bottom: 1px solid #000;
-  box-shadow: 0 1px 0 0 #000;
-}
-/* invalid color */
-.input-field input[type=text].invalid {
   border-bottom: 1px solid #000;
   box-shadow: 0 1px 0 0 #000;
 }
@@ -156,4 +216,8 @@ body {
 
 .collection .collection-item {
   padding: 10px;
+}
+
+.pagination .active {
+  background-color: #ffb300 !important;
 }

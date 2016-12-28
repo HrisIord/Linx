@@ -11,6 +11,10 @@ function handleMsg(request, sender, callback) {
       console.log('status: ' + xhr.status);
       if (xhr.status == 200) {
         console.log(xhr.responseText);
+        // return response to the popup js
+        callback(JSON.parse(xhr.responseText));
+      } else {
+        callback(null);
       }
     }
   }
@@ -30,8 +34,8 @@ function handleMsg(request, sender, callback) {
     xhr.send(params);
   }
 
-  // return response to the popup js
-  return callback("Hi from content script");
+  // keep callback function alive for asyncronous call later
+  return true;
 }
 
 

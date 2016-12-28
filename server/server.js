@@ -35,6 +35,7 @@ var httpsPort = 8443;
 
 var userModel = require('./userModel')();
 var repoModel = require('./repoModel')();
+var validate = require('./validator');
 
 // --------------------------------- HELPERS ----------------------------------
 // checks ig an object is empty
@@ -127,12 +128,17 @@ passport.use(new LocalStrategy({
 // --------------------------- USERS CONTROLLER -------------------------------
 router.route('/login')
   .post(function (req, res, next) {
+    var errors = validate.login(req.body);
+    if (errors.length != 0) {
+      res.status(200).json({'error': errors});
+      return;
+    }
 
     passport.authenticate('local', function (err, user, info) {
       if (err) { 
         console.log('[error] authenticate callback - ');
         console.log(err);
-        res.status(500).json({'error': err.errmsg});
+        res.status(200).json({'error': [err]});
         return;
       }
       if (!user) { 
@@ -150,17 +156,19 @@ router.route('/login')
           return;
         }
 
-        res.status(200).json({
-          'user': user,
-          'error': null
-        });
+        res.status(200).json({'error': null});
       });
     })(req, res, next);
-
   });
 
 router.route('/register')
   .post(function (req, res) {
+    var errors = validate.register(req.body);
+    if (errors.length != 0) {
+      res.status(200).json({'error': errors});
+      return;
+    }
+
     userModel.insert(req.body.username, req.body.password, {email: req.body.email}, function (err, result) {
       if (err) { 
         console.log('[error] register callback - ');
@@ -179,21 +187,41 @@ router.route('/register')
           status = 500;
         }
 
-        res.status(status).json({'error': errorMsg});
+        res.status(status).json({'error': [errorMsg]});
         return;
       }
 
       // create default repo for user
-      console.log(result.insertedIds);
-      repoModel.insert(result.insertedIds[0], username + "'s Default Repo", function (err, result) {
+      var userId = result.insertedIds[0];
+      repoModel.insert(userId, req.body.username + "'s Default Repo", function (err, result) {
         if (err) {
-          console.log('[error] register callback - ');
+          console.log('[error] register callback - create repo callback -');
           console.log(err);
-          res.status(500).json({'error': err.errmsg});
+          res.status(500).json({'error': [err.errmsg]});
           return;
         }
 
-        res.status(200).json({'error': null});
+        //  get user from db
+        userModel.select(userId, function (err, user) {
+          if (err) {
+            console.log('[error] register callback - get user callback -');
+            console.log(err);
+            res.status(500).json({'error': [err.errmsg]});
+            return;
+          }
+
+          // log in user
+          req.logIn(user, function (err) {
+            if (err) { 
+              console.log('[error] register callback - login callback -');
+              console.log(err);
+              res.status(500).json({'error': [err.errmsg]});
+              return;
+            }
+
+            res.status(200).json({'error': null});
+          });
+        });
       });      
     });
   });
@@ -293,12 +321,8 @@ function insertLink(link, callback) {
 app.use('/', router);
 
 // RUN EVERYTHING!
-var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
-httpServer.listen(httpPort, function() {
-  console.log('listening on *:' + httpPort);
-});
 httpsServer.listen(httpsPort, function() {
   console.log('listening on *:' + httpsPort);
 });

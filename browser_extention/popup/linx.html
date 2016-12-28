@@ -15,7 +15,7 @@
 
 <body>
 <!-- ******************************** HOME ******************************** -->
-<section id="home" style="display: none;">
+<section id="home">
   <h1 id="title" class="center-align white-text">
     Linx
   </h1>
@@ -32,34 +32,43 @@
   </div>
 
   <div id="register" style="display: none;">
-    <div class="row">
-      <div class="input-field col s12 white-text">
-        <input id="reg-username" type="text">
-        <label for="reg-username">Username</label>
+    <form class="row">
+      <div id="reg-errors" class="col s12" style="display: none;">
+        <div class="card-panel white amber-text text-darken-3"></div>
       </div>
       <div class="input-field col s12 white-text">
-        <input id="reg-email" type="email">
-        <label for="reg-email">Email</label>
+        <input id="reg-username" type="text" class="validate">
+        <label id="reg-username-label" for="reg-username">Username</label>
       </div>
       <div class="input-field col s12 white-text">
-        <input id="reg-password" type="password">
-        <label for="reg-password">Password</label>
+        <input id="reg-email" type="email" class="validate">
+        <label id="reg-email-label" for="reg-email">Email</label>
       </div>
       <div class="input-field col s12 white-text">
-        <input id="reg-password-conf" type="password">
-        <label for="reg-password-conf">Confirm Password</label>
+        <input id="reg-password" type="password" class="validate">
+        <label id="reg-password-label" for="reg-password">Password</label>
+      </div>
+      <div class="input-field col s12 white-text">
+        <input id="reg-password-conf" type="password" class="validate">
+        <label id="reg-password-conf-label" for="reg-password-conf">Confirm Password</label>
       </div>
       <div class="col s12">
         <br>
-        <button id="register-sub-btn" class="waves-effect waves-light btn amber darken-1" style="width: 100%;">
+        <button id="register-sub-btn" type="submit" class="waves-effect waves-light btn amber darken-1 sub">
           Register
         </button>
+        <div id="register-sub-prog" class="progress white" style="display: none;">
+          <div class="indeterminate amber darken-1"></div>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 
   <div id="login" style="display: none;">
-    <div class="row">
+    <form class="row">
+      <div id="login-errors" class="col s12" style="display: none;">
+        <div class="card-panel white amber-text text-darken-3"></div>
+      </div>
       <div class="input-field col s12 white-text">
         <input id="login-username" type="text">
         <label for="login-username">Username</label>
@@ -70,35 +79,59 @@
       </div>
       <div class="col s12">
         <br>
-        <button id="login-sub-btn" class="waves-effect waves-light btn amber darken-1" style="width: 100%;">
+        <button id="login-sub-btn" type="submit" class="waves-effect waves-light btn amber darken-1 sub">
           Login
         </button>
+        <div id="login-sub-prog" class="progress white" style="display: none;">
+          <div class="indeterminate amber darken-1"></div>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 </section>
 
 <!-- ****************************** GENERAL ******************************* -->
-<section id="general" >
+<section id="general" style="display: none;">
   <ul class="tabs teal lighten-2">
     <li class="tab">
-      <a class="active white-text" href="#repos">Repos</a>
+      <a id="repo-tab" class="active white-text" href="#repos">Repos</a>
     </li>
     <li class="tab">
-      <a class="white-text" href="#settings">Settings</a>
+      <a id="settings-tab" class="white-text" href="#settings">Settings</a>
     </li>
   </ul>
   
   <!-- REPOS -->
   <div id="repos">
     <div id="repo-list">
+      <div class="action-btns row" style="border: none;">
+        <div class="col s4 center-align">
+          <a class="waves-effect waves-light btn amber darken-1">
+            Bookmark
+            <i class="material-icons right">bookmark</i>
+          </a>
+        </div>
+        <div class="col s4 center-align">
+          <a class="waves-effect waves-light btn amber darken-1">
+            Add
+            <i class="material-icons right">add</i>
+          </a>
+        </div>
+        <div class="col s4 center-align">
+          <a class="waves-effect waves-light btn amber darken-1">
+            Delete
+            <i class="material-icons right">delete</i>
+          </a>
+        </div>
+      </div>
+
       <ul class="collection">
         <li class="collection-item row valign-wrapper">
           <div class="col s10 repo-name valign">
             Fics
           </div>
           <div class="col s2 repo-link">
-            <a class="btn-floating waves-effect waves-light amber darken-1 right">
+            <a class="btn-floating waves-effect waves-light teal lighten-2 right">
               <i class="material-icons">play_arrow</i>
             </a>
           </div>
@@ -108,7 +141,7 @@
             Kpop
           </div>
           <div class="col s2 repo-link">
-            <a class="btn-floating waves-effect waves-light amber darken-1 right">
+            <a class="btn-floating waves-effect waves-light teal lighten-2 right">
               <i class="material-icons">play_arrow</i>
             </a>
           </div>
@@ -118,21 +151,54 @@
             Some long title because people suck xxx longer something
           </div>
           <div class="col s2 repo-link">
-            <a class="btn-floating waves-effect waves-light amber darken-1 right">
+            <a class="btn-floating waves-effect waves-light teal lighten-2 right">
               <i class="material-icons">play_arrow</i>
             </a>
           </div>
         </li>
       </ul>
+
+      <div class="center-align">
+        <ul class="pagination">
+          <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+          <li class="active"><a href="#!">1</a></li>
+          <li class="waves-effect waves-light"><a href="#!">2</a></li>
+          <li class="waves-effect waves-light"><a href="#!">...</a></li>
+          <li class="waves-effect waves-light"><a href="#!">4</a></li>
+          <li class="waves-effect waves-light"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+        </ul>
+      </div>
     </div>
 
     <div id="repo-details" style="display: none;">
       <div id="nav-area" class="valign-wrapper">
-        <a class="btn-floating waves-effect waves-light amber darken-1">
+        <a class="btn-floating waves-effect waves-light teal lighten-2">
           <i id="repo-details-back" class="material-icons">play_arrow</i>
         </a> 
         <span class="repo-name valign truncate">Title some long title because people suck</span> 
       </div>
+
+      <div class="action-btns row">
+        <div class="col s4 center-align">
+          <a class="waves-effect waves-light btn amber darken-1">
+            Bookmark
+            <i class="material-icons right">bookmark</i>
+          </a>
+        </div>
+        <div class="col s4 center-align">
+          <a class="waves-effect waves-light btn amber darken-1">
+            Add
+            <i class="material-icons right">add</i>
+          </a>
+        </div>
+        <div class="col s4 center-align">
+          <a class="waves-effect waves-light btn amber darken-1">
+            Delete
+            <i class="material-icons right">delete</i>
+          </a>
+        </div>
+      </div>
+
       <ul class="collection">
         <li class="collection-item row">
           <div class="link-details col s9">
@@ -177,9 +243,16 @@
           </div>
         </li>
       </ul>
-      <div class="right">
-        <a class="btn-floating waves-effect waves-light red"><i class="material-icons">turned_in</i></a>
-        <a class="btn-floating waves-effect waves-light red"><i class="material-icons">add</i></a>
+
+      <div class="center-align">
+        <ul class="pagination">
+          <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+          <li class="active"><a href="#!">1</a></li>
+          <li class="waves-effect"><a href="#!">2</a></li>
+          <li class="waves-effect"><a href="#!">...</a></li>
+          <li class="waves-effect"><a href="#!">4</a></li>
+          <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+        </ul>
       </div>
     </div>
 
@@ -187,7 +260,33 @@
   
   <!-- SETTINGS -->
   <div id="settings">
-    Something is here!
+    <div class="row">
+      <div class="input-field col s12">
+        <div class="settings-heading">Edit Account Info</div>
+      </div>
+      <div class="input-field col s12">
+        <input id="reg-username" type="text">
+        <label for="reg-username">Username</label>
+      </div>
+      <div class="input-field col s12">
+        <input id="reg-email" type="email">
+        <label for="reg-email">Email</label>
+      </div>
+      <div class="input-field col s12">
+        <input id="reg-password" type="password">
+        <label for="reg-password">Password</label>
+      </div>
+      <div class="input-field col s12">
+        <input id="reg-password-conf" type="password">
+        <label for="reg-password-conf">Confirm Password</label>
+      </div>
+      <div class="col s12">
+        <br>
+        <button id="register-sub-btn" class="waves-effect waves-light btn amber darken-1" style="width: 100%;">
+          Edit
+        </button>
+      </div>
+    </div>
   </div>
 
 </section>
