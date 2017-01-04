@@ -33,7 +33,7 @@
 
   <div id="register" style="display: none;">
     <form class="row">
-      <div id="reg-errors" class="col s12" style="display: none;">
+      <div id="register-errors" class="col s12 error-cont" style="display: none;">
         <div class="card-panel white amber-text text-darken-3"></div>
       </div>
       <div class="input-field col s12 white-text">
@@ -66,7 +66,7 @@
 
   <div id="login" style="display: none;">
     <form class="row">
-      <div id="login-errors" class="col s12" style="display: none;">
+      <div id="login-errors" class="col s12 error-cont" style="display: none;">
         <div class="card-panel white amber-text text-darken-3"></div>
       </div>
       <div class="input-field col s12 white-text">
@@ -94,16 +94,17 @@
 <section id="general" style="display: none;">
   <ul class="tabs teal lighten-2">
     <li class="tab">
-      <a id="repo-tab" class="active white-text" href="#repos">Repos</a>
+      <a class="active white-text" href="#repos">Repos</a>
     </li>
     <li class="tab">
-      <a id="settings-tab" class="white-text" href="#settings">Settings</a>
+      <a class="white-text" href="#settings">Settings</a>
     </li>
   </ul>
   
-  <!-- REPOS -->
+<!-- ******************************** REPOS ******************************* -->
   <div id="repos">
-    <div id="repo-list">
+<!-- INDEX -->
+    <div id="repo-index">
       <div class="action-btns row" style="border: none;">
         <div class="col s4 center-align">
           <a class="waves-effect waves-light btn amber darken-1">
@@ -112,7 +113,7 @@
           </a>
         </div>
         <div class="col s4 center-align">
-          <a class="waves-effect waves-light btn amber darken-1">
+          <a id="repo-new-nav-btn" class="waves-effect waves-light btn amber darken-1">
             Add
             <i class="material-icons right">add</i>
           </a>
@@ -170,7 +171,8 @@
       </div>
     </div>
 
-    <div id="repo-details" style="display: none;">
+<!-- VIEW -->
+    <div id="repo-view" style="display: none;">
       <div id="nav-area" class="valign-wrapper">
         <a class="btn-floating waves-effect waves-light teal lighten-2">
           <i id="repo-details-back" class="material-icons">play_arrow</i>
@@ -199,6 +201,8 @@
         </div>
       </div>
 
+<!-- ******************************** LINKS ******************************* -->
+<!-- INDEX -->
       <ul class="collection">
         <li class="collection-item row">
           <div class="link-details col s9">
@@ -243,6 +247,7 @@
           </div>
         </li>
       </ul>
+<!-- ***************************** END LINKS ****************************** -->
 
       <div class="center-align">
         <ul class="pagination">
@@ -256,33 +261,58 @@
       </div>
     </div>
 
+<!-- NEW -->
+    <div id="repo-new" style="display: none;">
+      <div class="row">
+        <div id="add-repo-errors" class="col s12 error-cont" style="display: none;">
+          <div class="card-panel white-text amber darken-1"></div>
+        </div>
+        <div class="input-field col s12">
+          <div class="settings-heading">Add Repo</div>
+        </div>
+        <div class="input-field col s12">
+          <input id="add-repo-name" type="text">
+          <label for="add-repo-name">Name</label>
+        </div>
+        <div class="col s12">
+          <br>
+          <button id="add-repo-sub-btn" class="waves-effect waves-light btn amber darken-1" style="width: 100%;">
+            Add
+          </button>
+          <div id="add-repo-sub-prog" class="progress amber darken-1" style="display: none;">
+            <div class="indeterminate white"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
   
-  <!-- SETTINGS -->
+<!-- ****************************** SETTINGS ****************************** -->
   <div id="settings">
     <div class="row">
       <div class="input-field col s12">
         <div class="settings-heading">Edit Account Info</div>
       </div>
       <div class="input-field col s12">
-        <input id="reg-username" type="text">
-        <label for="reg-username">Username</label>
+        <input id="edit-username" type="text">
+        <label for="edit-username">Username</label>
       </div>
       <div class="input-field col s12">
-        <input id="reg-email" type="email">
-        <label for="reg-email">Email</label>
+        <input id="edit-email" type="email">
+        <label for="edit-email">Email</label>
       </div>
       <div class="input-field col s12">
-        <input id="reg-password" type="password">
-        <label for="reg-password">Password</label>
+        <input id="edit-password" type="password">
+        <label for="edit-password">Password</label>
       </div>
       <div class="input-field col s12">
-        <input id="reg-password-conf" type="password">
-        <label for="reg-password-conf">Confirm Password</label>
+        <input id="edit-password-conf" type="password">
+        <label for="edit-password-conf">Confirm Password</label>
       </div>
       <div class="col s12">
         <br>
-        <button id="register-sub-btn" class="waves-effect waves-light btn amber darken-1" style="width: 100%;">
+        <button id="edit-sub-btn" class="waves-effect waves-light btn amber darken-1" style="width: 100%;">
           Edit
         </button>
       </div>

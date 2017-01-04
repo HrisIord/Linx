@@ -6,6 +6,14 @@ body {
   background-color: #4db6ac;
 }
 
+.sub {
+  width: 100%;
+}
+
+.error-cont .card-panel {
+  padding: 10px;
+  margin: 0 0 10px 0;
+}
 
 /* Home Section */
 
@@ -19,15 +27,6 @@ body {
 
 #nav-buttons button {
   width: 150px;
-}
-
-#home .sub {
-  width: 100%;
-}
-
-#reg-errors .card-panel {
-  padding: 10px;
-  margin: 0 0 10px 0;
 }
 
 /* Repos Section */
@@ -75,7 +74,7 @@ body {
   padding: 10px;
 }
 
-/* Link Index */
+/* Repo View / Link Index */
 
 #repo-details-back {
   /* flip horizontally */

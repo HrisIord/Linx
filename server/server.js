@@ -169,7 +169,7 @@ router.route('/register')
       return;
     }
 
-    userModel.insert(req.body.username, req.body.password, {email: req.body.email}, function (err, result) {
+    userModel.insert(req.body.username, req.body.password, req.body.email, function (err, result) {
       if (err) { 
         console.log('[error] register callback - ');
         console.log(err);
@@ -238,22 +238,22 @@ router.route('/profile')
     if (isEmpty(req.session.passport) || isEmpty(req.session.passport.user)) {
       res.status(401).json({'error': 'There is no logged in user.'});
       return;
-    } else {
-      //  get user from db
-      userModel.select(req.session.passport.user, function (err, user) {
-        if (err) {
-          console.log('[error] profile callback - ');
-          console.log(err);
-          res.status(500).json({'error': err.errmsg});
-          return;
-        }
-
-        res.status(200).json({
-          'user': user,
-          'error': null
-        });
-      });
     }
+
+    //  get user from db
+    userModel.select(req.session.passport.user, function (err, user) {
+      if (err) {
+        console.log('[error] profile callback - ');
+        console.log(err);
+        res.status(500).json({'error': err.errmsg});
+        return;
+      }
+
+      res.status(200).json({
+        'user': user,
+        'error': null
+      });
+    });
   });
 
 
@@ -267,6 +267,62 @@ router.route('/profile')
 //   });
 
 // --------------------------- REPOS CONTROLLER -------------------------------
+
+router.route('/repos/new')
+  .post(function(req, res) {
+    // check if a user is signed in
+    if (isEmpty(req.session.passport) || isEmpty(req.session.passport.user)) {
+      res.status(401).json({'error': 'There is no logged in user.'});
+      return;
+    }
+
+    repoModel.insert(req.session.passport.user, req.body.name, function (err, result) {
+      if (err) {
+        console.log('[error] new repo callback -');
+        console.log(err);
+        res.status(500).json({'error': [err.errmsg]});
+        return;
+      }
+
+      res.status(200).json({'error': null});
+    });
+  });
+
+router.route('/repos')
+  .get(function(req, res) {
+    // check if a user is signed in
+    if (isEmpty(req.session.passport) || isEmpty(req.session.passport.user)) {
+      res.status(401).json({'error': 'There is no logged in user.'});
+      return;
+    }
+
+    //  get user from db
+    repoModel.selectByUserID(req.session.passport.user, function (err, repos) { 
+      if (err === "No repos found for this user.") {
+        console.log('[error] repo index callback - ');
+        console.log(err);
+        res.status(200).json({'error': err.errmsg});
+        return;
+      }
+      if (err) {
+        console.log('[error] repo index callback - ');
+        console.log(err);
+        res.status(500).json({'error': err.errmsg});
+        return;
+      }
+
+      console.log(repos);
+      res.status(200).json({
+        'repos': repos,
+        'error': null
+      });
+    });
+  });
+
+router.route('/repos/:name')
+  .get(function(req, res) {
+    // TODO add functionality
+  });
 
 
 // ----------------------------------------------------------------------------

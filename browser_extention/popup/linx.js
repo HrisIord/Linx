@@ -1,3 +1,21 @@
+window.onload = function() {
+  console.log("onload " + Date());
+  chrome.storage.sync.get(['loggedIn'], function(items) {
+    console.log(items);
+    if (items['loggedIn'] === 'true') {
+      $('body').css({ 'background-color': '#FFFFFF'});
+      $('#home').hide();
+      $('#general').show();
+    }
+  });
+}
+
+$(document).ready(function(){
+  $('ul.tabs').tabs();
+});
+
+
+
 // helper functions
 
 function isEmpty(obj) {
@@ -33,6 +51,34 @@ $(document).on('click', '#register-nav-btn', function() {
   });
 });
 
+function loginRegCallback(res, caller) {
+  if (res == null || res == undefined) {
+    console.log("network error");
+  }
+
+  if (res.error == null) {
+    chrome.storage.sync.set({'loggedIn': 'true'}, function() {
+      console.log('Settings saved');
+    });
+    $('body').css({ 'background-color': '#FFFFFF', transition: 'background-color 0.25s' }, 500);
+    slideTransition($('#home'), $('#general'), 500);
+
+  } else {
+    var emptyErrors = isEmptyString($('#' + caller + '-errors .card-panel').html());
+    var errorMsgs = "";
+    for (var i in res.error) {
+      errorMsgs += '<div>' + res.error[i] + '</div>';
+    }
+
+    $('#' + caller + '-errors .card-panel').html(errorMsgs);
+    if (emptyErrors) {
+      $('#' + caller + '-errors').css({ opacity: 100, transition: 'opacity 0.25s' }).slideDown(250);
+    }
+    $('#' + caller + '-sub-prog').hide();
+    $('#' + caller + '-sub-btn').show();
+  }
+}
+
 $(document).on('click', '#login-sub-btn', function() {
   $('#login-sub-btn').hide();
   $('#login-sub-prog').show();
@@ -43,35 +89,12 @@ $(document).on('click', '#login-sub-btn', function() {
         method: 'POST',
         path: '/login', 
         content: {
-          username: $("#login-username").val(),
-          password: $("#login-password").val()
+          username: $('#login-username').val(),
+          password: $('#login-password').val()
         }
       },
-
       function(res) {
-        if (res == null) {
-          console.log("network error");
-        }
-
-        if (res.error == null) {
-          $('body').css({ 'background-color': '#FFFFFF', transition: 'background-color 0.25s' }, 500);
-          slideTransition($('#home'), $('#general'), 500);
-
-        } else {
-          var emptyErrors = isEmptyString($("#login-errors .card-panel").html());
-          var errorMsgs = "";
-          for (var i in res.error) {
-            errorMsgs += "<div>" + res.error[i] + "</div>";
-          }
-
-          $("#login-errors .card-panel").html(errorMsgs);
-          if (emptyErrors) {
-            $("#login-errors").css({ opacity: 100, transition: 'opacity 0.25s' }).slideDown(250);
-          }
-          $('#login-sub-prog').hide();
-          $('#login-sub-btn').show();
-        }
-        
+        loginRegCallback(res, 'login');
         return false;
       }
     );
@@ -85,41 +108,18 @@ $(document).on('click', '#register-sub-btn', function() {
 
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, 
-
       {
         method: 'POST', 
         path: '/register',
         content: {
-          username: $("#reg-username").val(),
-          password: $("#reg-password").val(),
-          passwordConfirmation: $("#reg-password-conf").val(),
-          email: $("#reg-email").val()
+          username: $('#reg-username').val(),
+          password: $('#reg-password').val(),
+          passwordConfirmation: $('#reg-password-conf').val(),
+          email: $('#reg-email').val()
         }
       },
-      
       function(res) {
-        if (res == null) {
-          console.log("network error");
-        }
-        if (res.error == null) {
-          $('body').css({ 'background-color': '#FFFFFF', transition: 'background-color 0.25s' }, 500);
-          slideTransition($('#home'), $('#general'), 500);
-
-        } else {
-          var emptyErrors = isEmptyString($("#reg-errors .card-panel").html());
-          var errorMsgs = "";
-          for (var i in res.error) {
-            errorMsgs += "<div>" + res.error[i] + "</div>";
-          }
-
-          $("#reg-errors .card-panel").html(errorMsgs);
-          if (emptyErrors) {
-            $("#reg-errors").css({ opacity: 100, transition: 'opacity 0.25s' }).slideDown(250);
-          }
-          $('#register-sub-prog').hide();
-          $('#register-sub-btn').show();
-        }
-        
+        loginRegCallback(res, 'register');
         return false;
       }
     );
@@ -127,10 +127,14 @@ $(document).on('click', '#register-sub-btn', function() {
   return false;
 });
 
-$(document).on('click', '#repo-list li', function() {
-  slideTransition($('#repo-list'), $('#repo-details'), 250);
+$(document).on('click', '#repo-index li', function() {
+  slideTransition($('#repo-index'), $('#repo-view'), 250);
+});
+
+$(document).on('click', '#repo-new-nav-btn', function() {
+  slideTransition($('#repo-index'), $('#repo-new'), 250);
 });
 
 $(document).on('click', '#repo-details-back', function() {
-  slideTransition($('#repo-details'), $('#repo-list'), 250);
+  slideTransition($('#repo-details'), $('#repo-index'), 250);
 });
