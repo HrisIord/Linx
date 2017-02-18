@@ -15,6 +15,11 @@ body {
   margin: 0 0 10px 0;
 }
 
+#preloader {
+  padding: 50px;
+  text-align: center;
+}
+
 /* Home Section */
 
 #title {
@@ -28,6 +33,13 @@ body {
 #nav-buttons button {
   width: 150px;
 }
+
+/* General Section */
+
+nav {
+  padding: 0 15px;
+}
+
 
 /* Repos Section */
 
@@ -76,27 +88,7 @@ body {
 
 /* Repo View / Link Index */
 
-#repo-details-back {
-  /* flip horizontally */
-  -moz-transform: scale(-1, 1);
-  -webkit-transform: scale(-1, 1);
-  -o-transform: scale(-1, 1);
-  -ms-transform: scale(-1, 1);
-  transform: scale(-1, 1);
-}
-
-#nav-area .repo-name {
-  display: inline-block;
-  max-width: 350px;
-  margin-left: 5px;
-  font-size: 2em;
-}
-
-#nav-area a {
-  margin: 0 3px;
-}
-
-#repo-details .collection {
+#repo-view .collection {
   border-left: none;
   border-right: none;
 }
@@ -219,4 +211,30 @@ body {
 
 .pagination .active {
   background-color: #ffb300 !important;
+}
+
+.breadcrumb {
+  display: inline-block;
+  cursor: pointer;
+  font-size: 16px !important;
+}
+
+.breadcrumb-title {
+  display: inline-block;
+  padding: 0 5px;
+  transition: background-color .3s;
+}
+
+.breadcrumb-title:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.breadcrumb:before {
+  cursor: auto;
+  font-size: 22px !important;
+  margin: 0 !important;
+}
+
+nav ul a:hover {
+    background-color: rgba(0,0,0,0.1);
 }

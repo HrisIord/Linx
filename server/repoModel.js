@@ -11,10 +11,8 @@ module.exports = function () {
   collectionInit();
   return {
     insert: insert,
-    selectByUserID: selectByUserID
-    // selectUser: selectUser,
-    // authUser: authUser,
-    // insertOrSelectUserFromTwitterID: insertOrSelectUserFromTwitterID
+    select: select,
+    insertLink: insertLink
   };
 };
 
@@ -28,10 +26,6 @@ function collectionInit() {
     }
 
     var collection = db.collection('repos');
-    // Create index on userId
-    collection.createIndex({"userId": 1}, {});
-    collection.createIndex({"name": 1}, {});
-    collection.createIndex({"userId": 1, "name": 1}, {unique: true});
   });
 }
 
@@ -42,43 +36,33 @@ function collectionInit() {
 function insert(userId, name, callback) {
   // Generate document to be added to database
   var repo = {};
-  repo['userId'] = userId;
+  repo['permissions'] = userId;
   repo['name'] = name;
+  repo['links'] = [];
+  repo['createdDate'] = new Date();
 
   // Connect to the db
   MongoClient.connect(dbpath, function (err, db) {
     if (err) { return console.dir(err); }
 
-    var repo_collection = db.collection('repos');
-    repo_collection.insert(repo, function (err, result) {
-      callback(err, result);
-    });
-  });
-}
+    var repos_collection = db.collection('repos');
+    repos_collection.insert(repo, function (err, result) {
+      if (err) { return callback(err, result); }
 
-/**
- * Gets all repos associate with a user from the database.
- */
-function selectByUserID(userId, callback) {
-  MongoClient.connect(dbpath, function (err, db) {
-    if (err) { return console.dir(err); }
+      // add the repo to the user's list
+      var repoId = result.insertedIds[0];
+      var user_collection = db.collection('users');
+      user_collection.update(
+        { '_id': mongo.ObjectID(userId) },
+        { $addToSet: { 'repos': repoId } },
 
-    var collection = db.collection('repos');
-    var cursor = collection.find(
-      {'userId': mongo.ObjectID(userId)}, 
-      {'_id': false, 'userId': false});
-    var promise = cursor.toArray();
-    promise.then(
-      function(repos) {
-        if (repos.length == 0) {
-          callback("No repos found for this user.", null);
-        } else {
-          callback(null, repos);
+        function (err, result) {
+          select(repoId, function(err, repo) {
+            callback(err, repo);
+          });
         }
-      },
-      function(reason) {
-        callback(reason, null);
-      });    
+      );
+    });
   });
 }
 
@@ -86,17 +70,46 @@ function selectByUserID(userId, callback) {
  * Gets a repo from the database given a the ID of a repo.
  */
 function select(repoId, callback) {
+  MongoClient.connect(dbpath, function (err, db) {
+    if (err) { return console.dir(err); }
 
+    var collection = db.collection('repos');
+    var promise = collection.findOne({'_id': mongo.ObjectID(repoId)});
+    promise.then(
+      function (repo) {
+        if (!repo) {
+          callback("The repo does not exist.", null);
+        } else {
+          callback(null, repo);
+        }
+      }, 
+      function (reason) {
+        console.log("[error] repos select - ");
+        console.log(reason);
+        callback(reason, null);
+      });
+  });
 }
 
-/**
- * Gets a repo from the database given a name.
- */
-function selectByName(name, callback) {
+function insertLink(repoId, link, userId, callback) {
+  // Generate document to be added to database
+  var newLink = {};
+  newLink['name'] = link.name;
+  newLink['url'] = link.url;
+  newLink['createdDate'] = new Date();
+  newLink['createdBy'] = userId;
 
+  MongoClient.connect(dbpath, function (err, db) {
+    if (err) { return console.dir(err); }
+
+    var collection = db.collection('repos');
+    collection.update(
+      { '_id': mongo.ObjectID(repoId) },
+      { $addToSet: { 'links': newLink } },
+
+      function (err, result) {
+        callback(err, result);
+      }
+    );
+  });
 }
-
-function insertLink(repoId, link, callback) {
-
-}
-

@@ -20,7 +20,8 @@ module.exports = function () {
     insert: insert,
     select: select,
     authenticate: authenticate,
-    insertOrSelectUserFromTwitterID: insertOrSelectUserFromTwitterID
+    insertOrSelectUserFromTwitterID: insertOrSelectUserFromTwitterID,
+    selectRepos: selectRepos
   };
 };
 
@@ -41,6 +42,7 @@ function collectionInit() {
 
   });
 }
+
 
 /**
  * Creates a new local user asynchronously
@@ -65,6 +67,8 @@ function insert(username, password, email, callback) {
   user['password'] = hash;
   user['salt'] = salt.toString('hex');
   user['email'] = email;
+  user['repos'] = [];
+  user['createdDate'] = new Date();
 
   // Connect to the db
   MongoClient.connect(dbpath, function (err, db) {
@@ -89,13 +93,13 @@ function select(userId, callback) {
     promise.then(
       function (user) {
         if (!user) {
-          callback("User ID not in database.", null);
+          callback("The user does not exist.", null);
         } else {
           callback(null, user);
         }
       }, 
       function (reason) {
-        console.log("[error] selectUser - ");
+        console.log("[error] users select - ");
         console.log(reason);
         callback(reason, null);
       });
@@ -130,7 +134,7 @@ function authenticate(username, password, callback) {
         }
       }, 
       function (reason) {
-        console.log("[error] authUser - ");
+        console.log("[error] users authenticate - ");
         console.log(reason);
         callback(reason, null);
       });
@@ -187,4 +191,29 @@ function insertOrSelectUserFromTwitterID(twitterID, profiledata, callback) {
     });
 
   });
+}
+
+
+function selectRepos(userId, callback) {
+  select(userId, function (err, user) {
+    if (err) { return console.dir(err); }
+
+    MongoClient.connect(dbpath, function (err, db) {
+      if (err) { return console.dir(err); }
+
+      var repos_collection = db.collection('repos');
+      var cursor = repos_collection.find(
+        { '_id': { $in: user.repos } },
+        { 'links': false });
+      
+      var promise = cursor.toArray();
+      promise.then(
+        function(repos) {
+          callback(null, repos);
+        },
+        function(reason) {
+          callback(reason, null);
+        });    
+    });
+  });  
 }

@@ -156,7 +156,7 @@ router.route('/login')
           return;
         }
 
-        res.status(200).json({'error': null});
+        res.status(200).json({ 'error': null });
       });
     })(req, res, next);
   });
@@ -165,7 +165,7 @@ router.route('/register')
   .post(function (req, res) {
     var errors = validate.register(req.body);
     if (errors.length != 0) {
-      res.status(200).json({'error': errors});
+      res.status(200).json({ 'error': errors });
       return;
     }
 
@@ -187,7 +187,7 @@ router.route('/register')
           status = 500;
         }
 
-        res.status(status).json({'error': [errorMsg]});
+        res.status(status).json({ 'error': [errorMsg] });
         return;
       }
 
@@ -197,7 +197,7 @@ router.route('/register')
         if (err) {
           console.log('[error] register callback - create repo callback -');
           console.log(err);
-          res.status(500).json({'error': [err.errmsg]});
+          res.status(500).json({ 'error': [err.errmsg] });
           return;
         }
 
@@ -206,7 +206,7 @@ router.route('/register')
           if (err) {
             console.log('[error] register callback - get user callback -');
             console.log(err);
-            res.status(500).json({'error': [err.errmsg]});
+            res.status(500).json({ 'error': [err.errmsg] });
             return;
           }
 
@@ -215,11 +215,11 @@ router.route('/register')
             if (err) { 
               console.log('[error] register callback - login callback -');
               console.log(err);
-              res.status(500).json({'error': [err.errmsg]});
+              res.status(500).json({ 'error': [err.errmsg] });
               return;
             }
 
-            res.status(200).json({'error': null});
+            res.status(200).json({ 'error': null });
           });
         });
       });      
@@ -245,7 +245,7 @@ router.route('/profile')
       if (err) {
         console.log('[error] profile callback - ');
         console.log(err);
-        res.status(500).json({'error': err.errmsg});
+        res.status(500).json({ 'error': err.errmsg });
         return;
       }
 
@@ -257,16 +257,12 @@ router.route('/profile')
   });
 
 
-// router.route('/users/:id')
-//   .get(function(req, res) {
-//     var userId = url.parse(req.url, true).path.split('/')[2];
-//     userModel.selectUser(userId, function(err, user) {
-//       if (err) { return console.dir(err); }
-//       res.status(200).json({'user': user});
-//     });
-//   });
-
 // --------------------------- REPOS CONTROLLER -------------------------------
+
+router.param('repoId', function(req, res, next, id) {
+  req.repoId = (/^[0-9a-fA-F]{24}$/).test(id) ? id : -1;
+  next();
+});
 
 router.route('/repos/new')
   .post(function(req, res) {
@@ -276,15 +272,18 @@ router.route('/repos/new')
       return;
     }
 
-    repoModel.insert(req.session.passport.user, req.body.name, function (err, result) {
+    repoModel.insert(req.session.passport.user, req.body.name, function (err, repo) {
       if (err) {
         console.log('[error] new repo callback -');
         console.log(err);
-        res.status(500).json({'error': [err.errmsg]});
+        res.status(500).json({ 'error': [err.errmsg] });
         return;
       }
 
-      res.status(200).json({'error': null});
+      res.status(200).json({
+        'repo': repo,
+        'error': null
+      });
     });
   });
 
@@ -297,13 +296,7 @@ router.route('/repos')
     }
 
     //  get user from db
-    repoModel.selectByUserID(req.session.passport.user, function (err, repos) { 
-      if (err === "No repos found for this user.") {
-        console.log('[error] repo index callback - ');
-        console.log(err);
-        res.status(200).json({'error': err.errmsg});
-        return;
-      }
+    userModel.selectRepos(req.session.passport.user, function (err, repos) { 
       if (err) {
         console.log('[error] repo index callback - ');
         console.log(err);
@@ -311,7 +304,6 @@ router.route('/repos')
         return;
       }
 
-      console.log(repos);
       res.status(200).json({
         'repos': repos,
         'error': null
@@ -319,11 +311,56 @@ router.route('/repos')
     });
   });
 
-router.route('/repos/:name')
+router.route('/repos/:repoId')
   .get(function(req, res) {
-    // TODO add functionality
+    // check if a user is signed in
+    if (isEmpty(req.session.passport) || isEmpty(req.session.passport.user)) {
+      res.status(401).json({'error': 'There is no logged in user.'});
+      return;
+    } else if (req.repoId == -1) {
+      res.status(401).json({'error': 'No such repo.'});
+      return;
+    }
+
+    repoModel.select(req.repoId, function (err, repo) {
+      if (err) {
+        console.log('[error] repo show callback - ');
+        console.log(err);
+        res.status(500).json({'error': err.errmsg});
+        return;
+      }
+
+      res.status(200).json({
+        'repo': repo,
+        'error': null
+      });
+    });
+
   });
 
+router.route('/repos/:repoId/links/new')
+  .post(function(req, res) {
+    // check if a user is signed in
+    if (isEmpty(req.session.passport) || isEmpty(req.session.passport.user)) {
+      res.status(401).json({'error': 'There is no logged in user.'});
+      return;
+    } else if (req.repoId == -1) {
+      res.status(401).json({'error': 'No such repo.'});
+      return;
+    }
+
+    repoModel.insertLink(req.repoId, req.body, req.session.passport.user, function (err, result) {
+      //TODO: figure out how to send good message when repo doesn't exist
+      if (err) { 
+        console.log('[error] link new callback - ');
+        console.log(err);
+        res.status(500).json({ 'error': [err.errmsg] });
+        return;
+      }
+
+      res.status(200).json({ 'error': null });
+    });
+  });
 
 // ----------------------------------------------------------------------------
 

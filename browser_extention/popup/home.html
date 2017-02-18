@@ -1,0 +1,92 @@
+<h1 id="title" class="center-align white-text">
+  Linx
+</h1>
+
+<div id="nav-buttons" class="center-align">
+  <button id="login-nav-btn" class="waves-effect waves-light btn amber darken-1">
+    Login
+  </button>
+  <br>
+  <br>
+  <button id="register-nav-btn" class="waves-effect waves-light btn amber darken-1">
+    Register
+  </button>
+</div>
+
+<div id="register" style="display: none;">
+  <form class="row">
+    <div id="register-errors" class="col s12 error-cont" style="display: none;">
+      <div class="card-panel white amber-text text-darken-3"></div>
+    </div>
+    <div class="input-field col s12 white-text">
+      <input id="reg-username" type="text" class="validate">
+      <label id="reg-username-label" for="reg-username">Username</label>
+    </div>
+    <div class="input-field col s12 white-text">
+      <input id="reg-email" type="email" class="validate">
+      <label id="reg-email-label" for="reg-email">Email</label>
+    </div>
+    <div class="input-field col s12 white-text">
+      <input id="reg-password" type="password" class="validate">
+      <label id="reg-password-label" for="reg-password">Password</label>
+    </div>
+    <div class="input-field col s12 white-text">
+      <input id="reg-password-conf" type="password" class="validate">
+      <label id="reg-password-conf-label" for="reg-password-conf">Confirm Password</label>
+    </div>
+    
+    <br>
+    <div class="col s12">
+      <div class="row" id="register-btns" style="margin-bottom: 0;">
+        <div class="col s6">
+          <button id="register-back-btn" class="waves-effect waves-light btn amber darken-1 sub">
+            Back
+          </button>
+        </div>
+        <div class="col s6">
+          <button id="register-sub-btn" type="submit" class="waves-effect waves-light btn amber darken-1 sub">
+            Register
+          </button>
+        </div>
+      </div>
+      <div id="register-sub-prog" class="progress white" style="display: none;">
+        <div class="indeterminate amber darken-1"></div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="login" style="display: none;">
+  <form class="row">
+    <div id="login-errors" class="col s12 error-cont" style="display: none;">
+      <div class="card-panel white amber-text text-darken-3"></div>
+    </div>
+    <div class="input-field col s12 white-text">
+      <input id="login-username" type="text">
+      <label for="login-username">Username</label>
+    </div>
+    <div class="input-field col s12 white-text">
+      <input id="login-password" type="password">
+      <label for="login-password">Password</label>
+    </div>
+    
+    <br>
+    <div class="col s12">
+      <div class="row" id="login-btns" style="margin-bottom: 0;">
+        <div class="col s6">
+          <button id="login-back-btn" class="waves-effect waves-light btn amber darken-1 sub">
+            Back
+          </button>
+        </div>
+        <div class="col s6">
+          <button id="login-sub-btn" type="submit" class="waves-effect waves-light btn amber darken-1 sub">
+            Login
+          </button>
+        </div>
+      </div>
+      <div id="login-sub-prog" class="progress white" style="display: none;">
+        <div class="indeterminate amber darken-1"></div>
+      </div>
+    </div>
+  </form>
+</div>
