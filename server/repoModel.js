@@ -12,6 +12,7 @@ module.exports = function () {
   return {
     insert: insert,
     select: select,
+    selectByUserId: selectByUserId,
     insertLink: insertLink
   };
 };
@@ -26,6 +27,7 @@ function collectionInit() {
     }
 
     var collection = db.collection('repos');
+    collection.createIndex({"permissions": 1}, {unique: true});
   });
 }
 
@@ -91,7 +93,32 @@ function select(repoId, callback) {
   });
 }
 
-function insertLink(repoId, link, userId, callback) {
+/**
+ * Gets a repo from the database given a the ID of a repo.
+ */
+function selectByUserId(userId, callback) {
+  MongoClient.connect(dbpath, function (err, db) {
+    if (err) { return console.dir(err); }
+
+    var collection = db.collection('repos');
+    var promise = collection.findOne({'permissions': mongo.ObjectID(userId)});
+    promise.then(
+      function (repo) {
+        if (!repo) {
+          callback("The repo does not exist.", null);
+        } else {
+          callback(null, repo);
+        }
+      }, 
+      function (reason) {
+        console.log("[error] repos select - ");
+        console.log(reason);
+        callback(reason, null);
+      });
+  });
+}
+
+function insertLink(link, userId, callback) {
   // Generate document to be added to database
   var newLink = {};
   newLink['name'] = link.name;
@@ -104,7 +131,7 @@ function insertLink(repoId, link, userId, callback) {
 
     var collection = db.collection('repos');
     collection.update(
-      { '_id': mongo.ObjectID(repoId) },
+      { 'permissions': mongo.ObjectID(userId) },
       { $addToSet: { 'links': newLink } },
 
       function (err, result) {

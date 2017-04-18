@@ -125,6 +125,18 @@ passport.use(new LocalStrategy({
 
 // -------------------------- ROUTES FOR REST API -----------------------------
 
+// ------------------------------ MIDDLEWARE ----------------------------------
+router.use('/user', function(req, res, next) {
+  // check if a user is signed in
+  if (isEmpty(req.session.passport) || isEmpty(req.session.passport.user)) {
+    res.status(401).json({'error': 'There is no logged in user.'});
+  } else {
+    next();
+  }
+  return;
+});
+
+
 // --------------------------- USERS CONTROLLER -------------------------------
 router.route('/login')
   .post(function (req, res, next) {
@@ -232,14 +244,8 @@ router.route('/logout')
     res.status(200).json({'error': null});
   });
 
-router.route('/profile')
+router.route('/user')
   .get(function(req, res) {
-    // check if a user is signed in
-    if (isEmpty(req.session.passport) || isEmpty(req.session.passport.user)) {
-      res.status(401).json({'error': 'There is no logged in user.'});
-      return;
-    }
-
     //  get user from db
     userModel.select(req.session.passport.user, function (err, user) {
       if (err) {
@@ -256,73 +262,11 @@ router.route('/profile')
     });
   });
 
+// --------------------------- LINKS CONTROLLER -------------------------------
 
-// --------------------------- REPOS CONTROLLER -------------------------------
-
-router.param('repoId', function(req, res, next, id) {
-  req.repoId = (/^[0-9a-fA-F]{24}$/).test(id) ? id : -1;
-  next();
-});
-
-router.route('/repos/new')
-  .post(function(req, res) {
-    // check if a user is signed in
-    if (isEmpty(req.session.passport) || isEmpty(req.session.passport.user)) {
-      res.status(401).json({'error': 'There is no logged in user.'});
-      return;
-    }
-
-    repoModel.insert(req.session.passport.user, req.body.name, function (err, repo) {
-      if (err) {
-        console.log('[error] new repo callback -');
-        console.log(err);
-        res.status(500).json({ 'error': [err.errmsg] });
-        return;
-      }
-
-      res.status(200).json({
-        'repo': repo,
-        'error': null
-      });
-    });
-  });
-
-router.route('/repos')
+router.route('/user/links')
   .get(function(req, res) {
-    // check if a user is signed in
-    if (isEmpty(req.session.passport) || isEmpty(req.session.passport.user)) {
-      res.status(401).json({'error': 'There is no logged in user.'});
-      return;
-    }
-
-    //  get user from db
-    userModel.selectRepos(req.session.passport.user, function (err, repos) { 
-      if (err) {
-        console.log('[error] repo index callback - ');
-        console.log(err);
-        res.status(500).json({'error': err.errmsg});
-        return;
-      }
-
-      res.status(200).json({
-        'repos': repos,
-        'error': null
-      });
-    });
-  });
-
-router.route('/repos/:repoId')
-  .get(function(req, res) {
-    // check if a user is signed in
-    if (isEmpty(req.session.passport) || isEmpty(req.session.passport.user)) {
-      res.status(401).json({'error': 'There is no logged in user.'});
-      return;
-    } else if (req.repoId == -1) {
-      res.status(401).json({'error': 'No such repo.'});
-      return;
-    }
-
-    repoModel.select(req.repoId, function (err, repo) {
+    repoModel.selectByUserId(req.session.passport.user, function (err, repo) {
       if (err) {
         console.log('[error] repo show callback - ');
         console.log(err);
@@ -331,26 +275,15 @@ router.route('/repos/:repoId')
       }
 
       res.status(200).json({
-        'repo': repo,
+        'links': repo.links,
         'error': null
       });
     });
-
   });
 
-router.route('/repos/:repoId/links/new')
+router.route('/user/links/new')
   .post(function(req, res) {
-    // check if a user is signed in
-    if (isEmpty(req.session.passport) || isEmpty(req.session.passport.user)) {
-      res.status(401).json({'error': 'There is no logged in user.'});
-      return;
-    } else if (req.repoId == -1) {
-      res.status(401).json({'error': 'No such repo.'});
-      return;
-    }
-
-    repoModel.insertLink(req.repoId, req.body, req.session.passport.user, function (err, result) {
-      //TODO: figure out how to send good message when repo doesn't exist
+    repoModel.insertLink(req.body, req.session.passport.user, function (err, result) {
       if (err) { 
         console.log('[error] link new callback - ');
         console.log(err);

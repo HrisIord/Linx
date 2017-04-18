@@ -123,45 +123,87 @@ nav {
   font-size: 2em;
 }
 
+
+/* Bookmarks */
+
+.flip-container {
+  perspective: 1000px;
+}
+
+/* flip the pane when hovered */
+.flip-container .flip .flipper {
+  transform: rotateY(180deg);
+}
+
+/* flip speed goes here */
+.flipper {
+  transition: 0.6s;
+  transform-style: preserve-3d;
+
+  position: relative;
+}
+
+/* hide back of pane during swap */
+.front, .back {
+  backface-visibility: hidden;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* front pane, placed above back */
+.front {
+  z-index: 2;
+  /* for firefox 31 */
+  transform: rotateY(0deg);
+}
+
+/* back, initially hidden pane */
+.back {
+  transform: rotateY(180deg);
+}
+
+
 /* Materialize overrides for input feilds */
 
 /* label color */
-#home .input-field label {
+#home-config .input-field label {
   color: white;
 }
-#home .input-field input {
+#home-config .input-field input {
   border-bottom: 1px solid white;
   box-shadow: 0 1px 0 0 white;
 }
 /* label focus color */
-#home .input-field input[type=text]:focus + label {
+#home-config .input-field input[type=text]:focus + label {
   color: white;
 }
 /* label underline focus color */
-#home .input-field input[type=text]:focus {
+#home-config .input-field input[type=text]:focus {
   border-bottom: 1px solid white;
   box-shadow: 0 1px 0 0 white;
 }
 /* label focus color */
-#home .input-field input[type=password]:focus + label {
+#home-config .input-field input[type=password]:focus + label {
   color: white;
 }
 /* label underline focus color */
-#home .input-field input[type=password]:focus {
+#home-config .input-field input[type=password]:focus {
   border-bottom: 1px solid white;
   box-shadow: 0 1px 0 0 white;
 }
 /* label focus color */
-#home .input-field input[type=email]:focus + label {
+#home-config .input-field input[type=email]:focus + label {
   color: white;
 }
 /* label underline focus color */
-#home .input-field input[type=email]:focus {
+#home-config .input-field input[type=email]:focus {
   border-bottom: 1px solid white;
   box-shadow: 0 1px 0 0 white;
 }
 /* invalid color */
-#home .input-field input[type=text].invalid {
+#home-config .input-field input[type=text].invalid {
   border-bottom: 1px solid #ffb300;
   box-shadow: 0 1px 0 0 #ffb300;
 }

@@ -16,7 +16,8 @@
     "<all_urls>",
     "webRequest",
     "webRequestBlocking",
-    "storage"
+    "storage",
+    "bookmarks"
   ],    
     
   "content_scripts": [

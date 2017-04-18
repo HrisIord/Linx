@@ -1,0 +1,79 @@
+<!-- ********************************************************************** -->
+<!--                                  LINKS                                 -->
+<!-- ********************************************************************** -->
+
+<nav class="teal lighten-2">
+  <div class="nav-wrapper">
+    <span id="nav-breadcrumbs" class="">
+      <a secid="link-index" class="breadcrumb"><span class="breadcrumb-title">Links</span></a>
+    </span>
+    <ul class="right">
+      <li><a id="settings-nav"><i class="material-icons">settings</i></a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ******************************** INDEX ******************************* -->
+<div id="link-index" style="display: none;">
+  <div class="action-btns row">
+    <div class="col s6 center-align">
+      <div class="list">
+        <a id="link-index-bookmark" class="waves-effect waves-light btn amber darken-1">
+          Bookmark
+          <i class="material-icons right">bookmark</i>
+        </a>
+      </div>
+      <div class="bookmark" style="display: none;">
+        <a id="link-index-list" class="waves-effect waves-light btn amber darken-1" >
+          List
+          <i class="material-icons right">bookmark</i>
+        </a>
+      </div>
+    </div>
+    
+    <div class="col s6 center-align">
+      <div class="list">
+        <a id="link-new-nav-btn" class="waves-effect waves-light btn amber darken-1">
+          Add
+          <i class="material-icons right">add</i>
+        </a>
+      </div>
+      <div class="bookmark" style="display: none;">
+        <a id="link-index-bookmark-all" class="waves-effect waves-light btn amber darken-1">
+          All
+          <i class="material-icons right">add</i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <ul id="link-list" class="collection"></ul>
+</div>
+
+<!-- ********************************* NEW ******************************** -->
+<div id="link-new" style="display: none;">
+  <div class="row">
+    <div id="link-new-errors" class="col s12 error-cont" style="display: none;">
+      <div class="card-panel white-text amber darken-1"></div>
+    </div>
+
+    <div class="input-field col s12">
+      <input id="link-new-name" type="text">
+      <label for="link-new-name">Name</label>
+    </div>
+    <div class="input-field col s12">
+      <input id="link-new-url" type="text">
+      <label for="link-new-url">URL</label>
+    </div>
+    
+    <br>
+    <div class="col s12">
+      <button id="link-new-sub-btn" class="waves-effect waves-light btn amber darken-1" style="width: 100%;">
+        Add
+      </button>
+      <div id="link-new-sub-prog" class="progress amber darken-1" style="display: none;">
+        <div class="indeterminate white"></div>
+      </div>
+    </div>
+  </div>
+</div>

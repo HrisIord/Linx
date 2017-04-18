@@ -75,18 +75,16 @@ function removeBreadcrumb(keep) {
 
 function loadGeneralSection(callback) {
   // get html from files
-  jQuery.get('repos.html', function(reposHtml) {
+  jQuery.get('links.html', function(linksHtml) {
     jQuery.get('settings.html', function(settingsHtml) {
       // hide home sections
       $('body').css({ 'background-color': '#FFFFFF', transition: 'background-color 0.25s' }, 500);
       $('#home').css({ opacity: 0, transition: 'opacity 0.25s' }).slideUp(500, function() {
         // add html we got to the appropariate section
-        $('#repos').html(reposHtml).promise().done(function() {
+        $('#links').html(linksHtml).promise().done(function() {
           $('#settings').html(settingsHtml).promise().done(function() {
-            // fix the indicator on load gdi
-            $('.indicator').css({ 'right': '209.563px' });
             // show general section
-            showPreLoader($('#repos'));
+            showPreLoader($('#links'));
             $('#general').css({ opacity: 100, transition: 'opacity 0.25s' }).slideDown(500);
             
             if (callback != undefined) {
@@ -107,17 +105,34 @@ function loadGeneralSection(callback) {
  *****************************************************************************/
 
 window.onload = function() {
-  chrome.storage.sync.get(['loggedIn'], function(items) {
-    if (items['loggedIn'] === 'true') {
-      loadGeneralSection(function() {
-        renderReposIndex();
-      });
-    } else {
-      jQuery.get('home.html', function(homeHtml) {
-        $('#home').html(homeHtml);
-        $('#home').show();
+  chrome.storage.sync.get(['bookmarksFolder', 'loggedIn'], function(items) {
+    // load config section if bookmarksFolder has not been configured
+    var loadedConfig = false;
+    if (isEmpty(items['bookmarksFolder'])) {
+      loadedConfig = true;
+      // get html from files
+      jQuery.get('config.html', function(configHtml) {
+        // add html we got to the appropariate section
+        $('#config').html(configHtml).promise().done(function() {
+              
+          // show config section
+          $('#home-config').show();
+          $('#config').css({ opacity: 100, transition: 'opacity 0.25s' }).slideDown(500);
+        });
       });
     }
+
+    // // determine which section to load
+    // if (items['loggedIn'] === 'true') {
+    //   loadGeneralSection(function() {
+    //     renderLinkIndex(true);
+    //   });
+    // } else {
+    //   jQuery.get('home.html', function(homeHtml) {
+    //     $('#home').html(homeHtml);
+    //     $('#home').show();
+    //   });
+    // }
   });
 }
 
@@ -227,7 +242,7 @@ function loginRegCallback(res, caller) {
   if (res.error == null) {
     chrome.storage.sync.set({'loggedIn': 'true'}, function() {
       loadGeneralSection();
-      renderReposIndex();
+      renderLinkIndex();
     });
   } else {
     showErrors(caller, res.error);
@@ -241,13 +256,9 @@ $(document).on('click', '.breadcrumb-title', function() {
   var lastSecid = $('.breadcrumb:last-child').attr('secid');
 
   // reload screen
-  if (clickedSecid === 'repo-index') {
-    renderReposIndex();
-  } else if (clickedSecid === 'repo-view') {
-    // should fix this
-    $(this).parent().remove(); // render adds the tag so need to remove this one
-    renderReposView($(this).attr('repoId'));
-  }
+  if (clickedSecid === 'link-index') {
+    renderLinkIndex();
+  } 
 
   if (lastSecid === clickedSecid) {
     // clicked on the last child we're done
@@ -261,88 +272,27 @@ $(document).on('click', '.breadcrumb-title', function() {
 });
 
 $(document).on('click', '#settings-nav', function() {
-  slideTransition($('#repos'), $('#settings'), 250);
+  slideTransition($('#links'), $('#settings'), 250);
 });
 
 $(document).on('click', '#repos-nav', function() {
-  slideTransition($('#settings'), $('#repos'), 250);
+  slideTransition($('#settings'), $('#links'), 250);
 });
 
-/*********************************** REPOS ***********************************/
+/*********************************** LINKS ***********************************/
 
 // --------------------------------- INDEX ------------------------------------
 
-$(document).on('click', '#repo-index .view-repo-btn', function() {
-  $('#repo-index').hide();
-  showPreLoader($('#repos'));
-  renderReposView($(this).attr('repoId'), true);
-});
-
-$(document).on('click', '#repo-new-nav-btn', function() {
-  // reset form last add
-  $('#repo-new-sub-prog').hide();
-  $('#repo-new-sub-btn').show();
-  $('#repo-new-name').val('');
-
-  addBreadcrumb('Add Repo', 'repo-new');
-  slideTransition($('#repo-index'), $('#repo-new'), 250);
-});
-
-// ---------------------------------- NEW -------------------------------------
-
-$(document).on('click', '#repo-new-sub-btn', function() {
-  $('#repo-new-sub-btn').hide();
-  $('#repo-new-sub-prog').show();
-
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, 
-      {
-        method: 'POST', 
-        path: '/repos/new',
-        content: {
-          name: $('#repo-new-name').val()
-        }
-      },
-      function(res) { 
-        if (res == null || res == undefined) {
-          //TODO: handle better
-          console.log("network error");
-          return;
-        }
-        if (res.error != null) {
-          // reset buttons/progress bar
-          $('#repo-new-sub-prog').hide();
-          $('#repo-new-sub-btn').show();
-          showErrors("repo-new", res.error);
-          return;
-        }
-
-        $('#repo-view-name').html(res.repo.name);
-        $('#link-index').html(generateLinksIndex(res.repo.links));
-        removeBreadcrumb('repo-index');
-        addBreadcrumb(res.repo.name, 'repo-view', res.repo._id);
-        slideTransition($('#repo-new'), $('#repo-view'), 250);
-      }
-    );
-  });
-  return false;
-});
-
-// ---------------------------------- VIEW ------------------------------------
-
 $(document).on('click', '#link-new-nav-btn', function() {
   // reset add buttons form last add
-  $('#repo-new-sub-prog').hide();
-  $('#repo-new-sub-btn').show();
+  $('#link-new-sub-prog').hide();
+  $('#link-new-sub-btn').show();
 
-  if ($('#link-new-repo-id').val() !== $('#repo-view-id').html()) {
-    $('#link-new-repo-id').val($('#repo-view-id').html());
-    $('#link-new-name').val('');
-    $('#link-new-url').val('');
-  }
+  $('#link-new-name').val('');
+  $('#link-new-url').val('');
 
   addBreadcrumb('Add Link', 'link-new');
-  slideTransition($('#repo-view'), $('#link-new'), 250);
+  slideTransition($('#link-index'), $('#link-new'), 250);
 });
 
 // -------------------------------- LINK NEW ----------------------------------
@@ -355,7 +305,7 @@ $(document).on('click', '#link-new-sub-btn', function() {
     chrome.tabs.sendMessage(tabs[0].id, 
       {
         method: 'POST', 
-        path: '/repos/' + $('#link-new-repo-id').val() + '/links/new',
+        path: '/user/links/new',
         content: {
           name: $('#link-new-name').val(),
           url: $('#link-new-url').val()
@@ -375,23 +325,39 @@ $(document).on('click', '#link-new-sub-btn', function() {
           return;
         }
 
-        removeBreadcrumb('repo-index');
+        removeBreadcrumb('link-index');
         $('#link-new').hide();
-        renderReposView($('#link-new-repo-id').val(), false);
+        renderLinkIndex(false);
       }
     );
   });
   return false;
 });
 
+// ------------------------------- BOOKMARK -----------------------------------
+
+$(document).on('click', '#link-index-bookmark', function() {
+  $('.list').hide();
+  $('.bookmark').show();
+});
+
+$(document).on('click', '#link-index-list', function() {
+  $('.bookmark').hide();
+  $('.list').show();
+});
+
+$(document).on('click', '#link-index-bookmark-all', function() {
+  //TODO
+});
+
 // -------------------------------- HELPERS -----------------------------------
 
-function renderReposIndex() {
+function renderLinkIndex(hasPreLoader) {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, 
       {
         method: 'GET',
-        path: '/repos', 
+        path: '/user/links', 
         content: null
       },
       function(res) {
@@ -405,71 +371,27 @@ function renderReposIndex() {
           return;
         }
 
-        $('#repo-index-list').html(generateReposIndex(res.repos));
-        hidePreLoader();
-        $('#repo-index').css({ opacity: 1 });
-        $('#repo-index').show();
-      }
-    );
-  });
-  return false;
-}
-
-function renderReposView(repoId, hasPreLoader) {
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, 
-      {
-        method: 'GET',
-        path: '/repos/' + repoId, 
-        content: null
-      },
-      function(res) {
-        if (res == null || res == undefined) {
-          //TODO: handle better
-          console.log("network error");
-          return;
-        }
-        if (res.error != null) {
-          //TODO: This is an illigal access probably. Figure out what to do.
-          return;
-        }
-
-        addBreadcrumb(res.repo.name, 'repo-view', res.repo._id);
-        $('#repo-view-id').html(res.repo._id);
-        $('#link-index').html(generateLinksIndex(res.repo.links));
+        $('#link-list').html(generateLinkIndex(res.links));
         if (hasPreLoader) {
           hidePreLoader();
         }
-        $('#repo-view').css({ opacity: 1 });
-        $('#repo-view').show();
+        $('#link-index').css({ opacity: 1 });
+        $('#link-index').show();
       }
     );
   });
 }
 
-function generateReposIndex(repos) {
-  var LI_PART1 = '<li class="collection-item row valign-wrapper"><div class="col s10 repo-name valign">';
-  // Name goes here
-  var LI_PART2 = '</div><div class="col s2 repo-link"><a class="view-repo-btn btn-floating waves-effect waves-light teal lighten-2 right" repoId="';
-  // ID goes ehre
-  var LI_PART3 = '"><i class="material-icons">play_arrow</i></a></div></li>';
-
-  var repoList = '';
-  for (var i in repos) {
-    var repo = repos[i];
-    repoList += LI_PART1 + repo.name + LI_PART2 + repo._id + LI_PART3;
-  }
-  return repoList;
-}
-
-function generateLinksIndex(links) {
+function generateLinkIndex(links) {
   var LI_PART1 = '<li class="collection-item row"><div class="link-details col s9"><div class="link-title">'
   // Link name goes here
   var LI_PART2 = '</div><div class="link-url grey-text">'
   // Link URL goes here
-  var LI_PART3 = '</div></div><div class="link-action-btns col s3"><a class="btn-floating btn-flat waves-effect waves-teal">'
-                  + '<i class="material-icons">tab</i></a><a class="btn-floating btn-flat waves-effect waves-light">'
-                  + '<i class="material-icons">library_books</i></a></div></li>';
+  var LI_PART3 = '</div></div><div class="link-action-btns col s3">'
+                  + '<a class="btn-floating btn-flat waves-effect waves-teal list"><i class="material-icons">tab</i></a>'
+                  + '<a class="btn-floating btn-flat waves-effect waves-light list"><i class="material-icons">delete</i></a>'
+                  + '<a class="btn-floating btn-flat waves-effect waves-light bookmark" style="display: none;"><i class="material-icons">library_books</i></a>'
+                  + '</div></li>';
 
   var linkList = '';
   for (var i in links) {
